@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:ui';
 
 import 'package:facehash/src/faces/face_paths.dart';
@@ -179,14 +177,12 @@ void main() {
             expect(
               bounds.width,
               greaterThan(0),
-              reason:
-                  'Path for ${faceType.name} should have non-zero width',
+              reason: 'Path for ${faceType.name} should have non-zero width',
             );
             expect(
               bounds.height,
               greaterThan(0),
-              reason:
-                  'Path for ${faceType.name} should have non-zero height',
+              reason: 'Path for ${faceType.name} should have non-zero height',
             );
           }
         }

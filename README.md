@@ -1,5 +1,10 @@
 # FaceHash
 
+[![ci](https://github.com/sgruhier/flutter_facedash/actions/workflows/main.yaml/badge.svg)](https://github.com/sgruhier/flutter_facedash/actions/workflows/main.yaml)
+[![coverage](https://raw.githubusercontent.com/sgruhier/flutter_facedash/main/coverage_badge.svg)](https://github.com/sgruhier/flutter_facedash/actions/workflows/main.yaml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![style: very good analysis](https://img.shields.io/badge/style-very_good_analysis-B22C89.svg)](https://pub.dev/packages/very_good_analysis)
+
 Deterministic avatar faces from any string. Same input always produces the same unique face.
 
 Zero additional dependencies. Works everywhere Flutter runs.

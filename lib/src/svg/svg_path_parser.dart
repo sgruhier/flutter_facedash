@@ -56,7 +56,8 @@ Path parseSvgPath(String d) {
           // and "C ... x y x y x y" (implicit C continuation)
           i = _handleImplicitCommand(path, tokens, i, currentX, currentY);
           if (i < tokens.length && _isNumber(tokens[i])) {
-            // Update current position - already handled by _handleImplicitCommand
+            // Update current position - already handled
+            // by _handleImplicitCommand
           }
         } else {
           i++; // Skip unknown tokens

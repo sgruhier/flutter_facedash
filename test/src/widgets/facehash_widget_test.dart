@@ -1,7 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'dart:ui';
-
 import 'package:facehash/facehash.dart';
 import 'package:facehash/src/widgets/gradient_overlay.dart';
 import 'package:flutter/widgets.dart';
@@ -23,7 +19,7 @@ void main() {
     group('rendering', () {
       testWidgets('renders without error with just a name', (tester) async {
         await tester.pumpWidget(
-          buildTestWidget(Facehash(name: 'alice')),
+          buildTestWidget(const Facehash(name: 'alice')),
         );
 
         expect(find.byType(Facehash), findsOneWidget);
@@ -32,7 +28,7 @@ void main() {
       testWidgets('renders with all parameters specified', (tester) async {
         await tester.pumpWidget(
           buildTestWidget(
-            Facehash(
+            const Facehash(
               name: 'bob',
               size: 64,
               variant: FacehashVariant.solid,
@@ -40,7 +36,6 @@ void main() {
               intensity3d: Intensity3D.subtle,
               interactive: false,
               showInitial: false,
-              enableBlink: false,
               eyeColor: Color(0xFF000000),
             ),
           ),
@@ -53,7 +48,7 @@ void main() {
     group('size', () {
       testWidgets('respects default size of 40', (tester) async {
         await tester.pumpWidget(
-          buildTestWidget(Facehash(name: 'alice')),
+          buildTestWidget(const Facehash(name: 'alice')),
         );
 
         final sizedBox = tester.widget<SizedBox>(
@@ -69,7 +64,7 @@ void main() {
 
       testWidgets('respects custom size parameter', (tester) async {
         await tester.pumpWidget(
-          buildTestWidget(Facehash(name: 'alice', size: 80)),
+          buildTestWidget(const Facehash(name: 'alice', size: 80)),
         );
 
         final sizedBox = tester.widget<SizedBox>(
@@ -85,11 +80,12 @@ void main() {
     });
 
     group('initial letter', () {
-      testWidgets('shows initial letter when showInitial is true',
-          (tester) async {
+      testWidgets('shows initial letter when showInitial is true', (
+        tester,
+      ) async {
         await tester.pumpWidget(
           buildTestWidget(
-            Facehash(name: 'alice'),
+            const Facehash(name: 'alice'),
           ),
         );
 
@@ -97,21 +93,21 @@ void main() {
         expect(find.text('A'), findsOneWidget);
       });
 
-      testWidgets('hides initial letter when showInitial is false',
-          (tester) async {
+      testWidgets('hides initial letter when showInitial is false', (
+        tester,
+      ) async {
         await tester.pumpWidget(
           buildTestWidget(
-            Facehash(name: 'alice', showInitial: false),
+            const Facehash(name: 'alice', showInitial: false),
           ),
         );
 
         expect(find.text('A'), findsNothing);
       });
 
-      testWidgets('shows correct initial for different names',
-          (tester) async {
+      testWidgets('shows correct initial for different names', (tester) async {
         await tester.pumpWidget(
-          buildTestWidget(Facehash(name: 'bob')),
+          buildTestWidget(const Facehash(name: 'bob')),
         );
 
         expect(find.text('B'), findsOneWidget);
@@ -119,7 +115,7 @@ void main() {
 
       testWidgets('shows no text for empty name', (tester) async {
         await tester.pumpWidget(
-          buildTestWidget(Facehash(name: '')),
+          buildTestWidget(const Facehash(name: '')),
         );
 
         // Empty name -> empty initial -> no visible text widget with content
@@ -128,14 +124,13 @@ void main() {
     });
 
     group('mouthBuilder', () {
-      testWidgets('shows mouthBuilder content when provided',
-          (tester) async {
+      testWidgets('shows mouthBuilder content when provided', (tester) async {
         await tester.pumpWidget(
           buildTestWidget(
             Facehash(
               name: 'alice',
               size: 120,
-              mouthBuilder: (data) => Text('custom-mouth'),
+              mouthBuilder: (data) => const Text('custom-mouth'),
             ),
           ),
         );
@@ -145,8 +140,7 @@ void main() {
         expect(find.text('A'), findsNothing);
       });
 
-      testWidgets('mouthBuilder receives correct FacehashData',
-          (tester) async {
+      testWidgets('mouthBuilder receives correct FacehashData', (tester) async {
         late FacehashData receivedData;
 
         await tester.pumpWidget(
@@ -155,7 +149,7 @@ void main() {
               name: 'alice',
               mouthBuilder: (data) {
                 receivedData = data;
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               },
             ),
           ),
@@ -173,7 +167,7 @@ void main() {
         (tester) async {
           await tester.pumpWidget(
             buildTestWidget(
-              Facehash(name: 'alice', variant: FacehashVariant.gradient),
+              const Facehash(name: 'alice'),
             ),
           );
 
@@ -182,8 +176,7 @@ void main() {
           var foundGradient = false;
 
           for (var i = 0; i < customPaints.evaluate().length; i++) {
-            final widget =
-                tester.widget<CustomPaint>(customPaints.at(i));
+            final widget = tester.widget<CustomPaint>(customPaints.at(i));
             if (widget.painter is GradientOverlayPainter) {
               foundGradient = true;
               break;
@@ -199,7 +192,7 @@ void main() {
         (tester) async {
           await tester.pumpWidget(
             buildTestWidget(
-              Facehash(name: 'alice', variant: FacehashVariant.solid),
+              const Facehash(name: 'alice', variant: FacehashVariant.solid),
             ),
           );
 
@@ -207,8 +200,7 @@ void main() {
           var foundGradient = false;
 
           for (var i = 0; i < customPaints.evaluate().length; i++) {
-            final widget =
-                tester.widget<CustomPaint>(customPaints.at(i));
+            final widget = tester.widget<CustomPaint>(customPaints.at(i));
             if (widget.painter is GradientOverlayPainter) {
               foundGradient = true;
               break;
@@ -224,7 +216,7 @@ void main() {
       testWidgets('contains ClipPath for circle shape', (tester) async {
         await tester.pumpWidget(
           buildTestWidget(
-            Facehash(name: 'alice', shape: FacehashShape.circle),
+            const Facehash(name: 'alice'),
           ),
         );
 
@@ -240,7 +232,7 @@ void main() {
       testWidgets('contains ClipPath for squircle shape', (tester) async {
         await tester.pumpWidget(
           buildTestWidget(
-            Facehash(name: 'alice', shape: FacehashShape.squircle),
+            const Facehash(name: 'alice', shape: FacehashShape.squircle),
           ),
         );
 
@@ -253,11 +245,10 @@ void main() {
         );
       });
 
-      testWidgets('does NOT contain ClipPath for square shape',
-          (tester) async {
+      testWidgets('does NOT contain ClipPath for square shape', (tester) async {
         await tester.pumpWidget(
           buildTestWidget(
-            Facehash(name: 'alice', shape: FacehashShape.square),
+            const Facehash(name: 'alice', shape: FacehashShape.square),
           ),
         );
 
@@ -292,7 +283,7 @@ void main() {
 
       testWidgets('does not crash when onTap is null', (tester) async {
         await tester.pumpWidget(
-          buildTestWidget(Facehash(name: 'alice')),
+          buildTestWidget(const Facehash(name: 'alice')),
         );
 
         await tester.tap(find.byType(Facehash));
@@ -319,7 +310,7 @@ void main() {
               name: 'alice',
               mouthBuilder: (data) {
                 capturedData = data;
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               },
             ),
           ),
@@ -337,7 +328,7 @@ void main() {
               name: 'a',
               mouthBuilder: (data) {
                 capturedData = data;
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               },
             ),
           ),
@@ -355,7 +346,7 @@ void main() {
               name: 'hello',
               mouthBuilder: (data) {
                 capturedData = data;
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               },
             ),
           ),
@@ -364,8 +355,7 @@ void main() {
         expect(capturedData.faceType, equals(FaceType.line));
       });
 
-      testWidgets('renders curved face type (name: "sybil")',
-          (tester) async {
+      testWidgets('renders curved face type (name: "sybil")', (tester) async {
         late FacehashData capturedData;
 
         await tester.pumpWidget(
@@ -374,7 +364,7 @@ void main() {
               name: 'sybil',
               mouthBuilder: (data) {
                 capturedData = data;
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               },
             ),
           ),
@@ -394,7 +384,7 @@ void main() {
               name: 'alice',
               mouthBuilder: (data) {
                 capturedData = data;
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               },
             ),
           ),
@@ -408,7 +398,7 @@ void main() {
               name: 'a',
               mouthBuilder: (data) {
                 capturedData = data;
-                return SizedBox.shrink();
+                return const SizedBox.shrink();
               },
             ),
           ),
@@ -419,12 +409,12 @@ void main() {
 
       testWidgets('updates initial when name changes', (tester) async {
         await tester.pumpWidget(
-          buildTestWidget(Facehash(name: 'alice')),
+          buildTestWidget(const Facehash(name: 'alice')),
         );
         expect(find.text('A'), findsOneWidget);
 
         await tester.pumpWidget(
-          buildTestWidget(Facehash(name: 'bob')),
+          buildTestWidget(const Facehash(name: 'bob')),
         );
         expect(find.text('B'), findsOneWidget);
         expect(find.text('A'), findsNothing);
@@ -435,9 +425,9 @@ void main() {
       testWidgets('accepts custom color palette', (tester) async {
         await tester.pumpWidget(
           buildTestWidget(
-            Facehash(
+            const Facehash(
               name: 'alice',
-              colors: const [
+              colors: [
                 Color(0xFFFF0000),
                 Color(0xFF00FF00),
                 Color(0xFF0000FF),
@@ -451,11 +441,10 @@ void main() {
     });
 
     group('blink animation', () {
-      testWidgets('renders with blink enabled without error',
-          (tester) async {
+      testWidgets('renders with blink enabled without error', (tester) async {
         await tester.pumpWidget(
           buildTestWidget(
-            Facehash(name: 'alice', enableBlink: true),
+            const Facehash(name: 'alice', enableBlink: true),
           ),
         );
 
@@ -469,13 +458,13 @@ void main() {
       testWidgets('can toggle blink on and off', (tester) async {
         await tester.pumpWidget(
           buildTestWidget(
-            Facehash(name: 'alice', enableBlink: false),
+            const Facehash(name: 'alice'),
           ),
         );
 
         await tester.pumpWidget(
           buildTestWidget(
-            Facehash(name: 'alice', enableBlink: true),
+            const Facehash(name: 'alice', enableBlink: true),
           ),
         );
 
@@ -484,7 +473,7 @@ void main() {
 
         await tester.pumpWidget(
           buildTestWidget(
-            Facehash(name: 'alice', enableBlink: false),
+            const Facehash(name: 'alice'),
           ),
         );
 

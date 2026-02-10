@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:facehash/src/core/hash.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -38,24 +36,26 @@ void main() {
         expect(second, equals(third));
       });
 
-      test('hash is deterministic across multiple calls with various inputs',
-          () {
-        const inputs = [
-          'short',
-          'a much longer string with spaces and punctuation!',
-          '12345',
-          'UPPERCASE',
-          'mixedCase123',
-        ];
+      test(
+        'hash is deterministic across multiple calls with various inputs',
+        () {
+          const inputs = [
+            'short',
+            'a much longer string with spaces and punctuation!',
+            '12345',
+            'UPPERCASE',
+            'mixedCase123',
+          ];
 
-        for (final input in inputs) {
-          expect(
-            stringHash(input),
-            equals(stringHash(input)),
-            reason: 'Hash should be deterministic for "$input"',
-          );
-        }
-      });
+          for (final input in inputs) {
+            expect(
+              stringHash(input),
+              equals(stringHash(input)),
+              reason: 'Hash should be deterministic for "$input"',
+            );
+          }
+        },
+      );
     });
 
     group('uniqueness', () {

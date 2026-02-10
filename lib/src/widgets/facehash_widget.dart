@@ -249,7 +249,7 @@ class _FacehashState extends State<Facehash> with TickerProviderStateMixin {
         Duration(milliseconds: (timing.delay * 1000).round()),
         () {
           if (mounted && _blinkController == controller) {
-            controller.repeat();
+            unawaited(controller.repeat());
           }
         },
       ),
@@ -266,12 +266,12 @@ class _FacehashState extends State<Facehash> with TickerProviderStateMixin {
 
   void _onInteractionStart() {
     if (!widget.interactive) return;
-    _interactionController.forward();
+    unawaited(_interactionController.forward());
   }
 
   void _onInteractionEnd() {
     if (!widget.interactive) return;
-    _interactionController.reverse();
+    unawaited(_interactionController.reverse());
   }
 
   // -- 3D transform -----------------------------------------------------------

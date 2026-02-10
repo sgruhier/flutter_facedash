@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:ui';
 
 import 'package:facehash/src/core/colors.dart';
@@ -28,7 +26,7 @@ void main() {
         expect(data.hash, equals(0));
         expect(data.faceType, equals(FaceType.round));
         expect(data.colorIndex, equals(0));
-        expect(data.rotation, equals(Offset(-1, 1)));
+        expect(data.rotation, equals(const Offset(-1, 1)));
         expect(data.initial, equals(''));
       });
 
@@ -38,7 +36,7 @@ void main() {
         expect(data.hash, equals(97));
         expect(data.faceType, equals(FaceType.cross));
         expect(data.colorIndex, equals(2));
-        expect(data.rotation, equals(Offset(-1, -1)));
+        expect(data.rotation, equals(const Offset(-1, -1)));
         expect(data.initial, equals('A'));
       });
 
@@ -48,7 +46,7 @@ void main() {
         expect(data.hash, equals(99162322));
         expect(data.faceType, equals(FaceType.line));
         expect(data.colorIndex, equals(2));
-        expect(data.rotation, equals(Offset(-1, -1)));
+        expect(data.rotation, equals(const Offset(-1, -1)));
         expect(data.initial, equals('H'));
       });
 
@@ -60,7 +58,7 @@ void main() {
           expect(data.hash, equals(326742856));
           expect(data.faceType, equals(FaceType.round));
           expect(data.colorIndex, equals(1));
-          expect(data.rotation, equals(Offset(-1, -1)));
+          expect(data.rotation, equals(const Offset(-1, -1)));
           expect(data.initial, equals('J'));
         },
       );
@@ -71,7 +69,7 @@ void main() {
         expect(data.hash, equals(92903040));
         expect(data.faceType, equals(FaceType.round));
         expect(data.colorIndex, equals(0));
-        expect(data.rotation, equals(Offset(-1, 1)));
+        expect(data.rotation, equals(const Offset(-1, 1)));
         expect(data.initial, equals('A'));
       });
 
@@ -81,7 +79,7 @@ void main() {
         expect(data.hash, equals(97717));
         expect(data.faceType, equals(FaceType.cross));
         expect(data.colorIndex, equals(2));
-        expect(data.rotation, equals(Offset(-1, 0)));
+        expect(data.rotation, equals(const Offset(-1, 0)));
         expect(data.initial, equals('B'));
       });
     });
@@ -180,24 +178,24 @@ void main() {
   group('getColor', () {
     test('returns color from provided palette at given index', () {
       final palette = [
-        Color(0xFFFF0000),
-        Color(0xFF00FF00),
-        Color(0xFF0000FF),
+        const Color(0xFFFF0000),
+        const Color(0xFF00FF00),
+        const Color(0xFF0000FF),
       ];
 
-      expect(getColor(palette, 0), equals(Color(0xFFFF0000)));
-      expect(getColor(palette, 1), equals(Color(0xFF00FF00)));
-      expect(getColor(palette, 2), equals(Color(0xFF0000FF)));
+      expect(getColor(palette, 0), equals(const Color(0xFFFF0000)));
+      expect(getColor(palette, 1), equals(const Color(0xFF00FF00)));
+      expect(getColor(palette, 2), equals(const Color(0xFF0000FF)));
     });
 
     test('wraps around when index exceeds palette length', () {
       final palette = [
-        Color(0xFFFF0000),
-        Color(0xFF00FF00),
+        const Color(0xFFFF0000),
+        const Color(0xFF00FF00),
       ];
 
-      expect(getColor(palette, 2), equals(Color(0xFFFF0000)));
-      expect(getColor(palette, 3), equals(Color(0xFF00FF00)));
+      expect(getColor(palette, 2), equals(const Color(0xFFFF0000)));
+      expect(getColor(palette, 3), equals(const Color(0xFF00FF00)));
     });
 
     test('falls back to defaultColors when palette is null', () {
@@ -211,9 +209,9 @@ void main() {
     });
 
     test('uses provided palette even if it has one color', () {
-      final single = [Color(0xFFABCDEF)];
-      expect(getColor(single, 0), equals(Color(0xFFABCDEF)));
-      expect(getColor(single, 5), equals(Color(0xFFABCDEF)));
+      final single = [const Color(0xFFABCDEF)];
+      expect(getColor(single, 0), equals(const Color(0xFFABCDEF)));
+      expect(getColor(single, 5), equals(const Color(0xFFABCDEF)));
     });
   });
 }
