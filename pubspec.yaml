@@ -1,0 +1,26 @@
+name: facehash
+description: >-
+  Deterministic avatar faces from any string. Same input always produces
+  the same unique face. Zero additional dependencies.
+version: 0.1.0
+homepage: https://facehash.dev
+repository: https://github.com/cossistantcom/cossistant/tree/main/packages/facehash/facehash
+issue_tracker: https://github.com/cossistantcom/cossistant/issues
+topics:
+  - avatar
+  - identicon
+  - generative
+  - ui
+
+environment:
+  sdk: ^3.10.0
+  flutter: ">=3.38.1"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^10.1.0

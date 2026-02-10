@@ -1,0 +1,18 @@
+name: facehash_example
+description: >-
+  Example app for facehash — a Flutter port of https://www.facehash.dev/
+  Built with Claude Code.
+publish_to: none
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  facehash:
+    path: ../
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

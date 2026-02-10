@@ -1,0 +1,104 @@
+# FaceHash
+
+Deterministic avatar faces from any string. Same input always produces the same unique face.
+
+Zero additional dependencies. Works everywhere Flutter runs.
+
+## Installation
+
+```yaml
+dependencies:
+  facehash: ^0.1.0
+```
+
+## Usage
+
+```dart
+import 'package:facehash/facehash.dart';
+
+// Simple usage
+const Facehash(name: 'alice')
+
+// Full customization
+Facehash(
+  name: 'bob@example.com',
+  size: 64,
+  shape: FacehashShape.squircle,
+  variant: FacehashVariant.solid,
+  intensity3d: Intensity3D.subtle,
+  enableBlink: true,
+  colors: [
+    Color(0xFF264653),
+    Color(0xFF2A9D8F),
+    Color(0xFFE76F51),
+  ],
+)
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `name` | `String` | required | String to generate a face from |
+| `size` | `double` | `40.0` | Avatar size in logical pixels |
+| `variant` | `FacehashVariant` | `gradient` | `gradient` or `solid` background |
+| `intensity3d` | `Intensity3D` | `dramatic` | 3D tilt: `none`, `subtle`, `medium`, `dramatic` |
+| `interactive` | `bool` | `true` | Flatten on hover/tap |
+| `showInitial` | `bool` | `true` | Show first letter below eyes |
+| `enableBlink` | `bool` | `false` | Eye blink animation |
+| `colors` | `List<Color>?` | 5 defaults | Custom color palette |
+| `shape` | `FacehashShape` | `circle` | `circle`, `square`, `squircle` |
+| `eyeColor` | `Color?` | white | Eye and initial color |
+| `mouthBuilder` | `Widget Function(FacehashData)?` | `null` | Custom mouth widget |
+| `onTap` | `VoidCallback?` | `null` | Tap callback |
+
+## Face Types
+
+FaceHash deterministically selects from 4 face types based on the input string hash:
+
+- **Round** - Simple circular eyes
+- **Cross** - Plus-shaped eyes
+- **Line** - Horizontal line eyes
+- **Curved** - Sleepy/happy curved eyes
+
+## Advanced Usage
+
+### Custom Mouth
+
+Replace the initial letter with any widget:
+
+```dart
+Facehash(
+  name: 'loading',
+  mouthBuilder: (data) => const SizedBox(
+    width: 16,
+    height: 16,
+    child: CircularProgressIndicator(strokeWidth: 2),
+  ),
+)
+```
+
+### Core Functions
+
+Access the hash and face data directly:
+
+```dart
+// Get the hash value
+final hash = stringHash('alice'); // 92903040
+
+// Get full face data
+final data = computeFacehash(name: 'alice');
+print(data.faceType);   // FaceType.round
+print(data.colorIndex);  // 0
+print(data.initial);     // 'A'
+```
+
+## Cross-Platform Parity
+
+FaceHash produces identical faces on all platforms. The same string generates the same face in both the Flutter package and the [React/npm package](https://www.npmjs.com/package/facehash).
+
+This is a Flutter port of [facehash.dev](https://www.facehash.dev/). Built with [Claude Code](https://claude.ai/code).
+
+## License
+
+MIT
