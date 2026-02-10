@@ -60,7 +60,6 @@ FacehashData computeFacehash({
 
 /// Gets a color from a palette by index, with fallback to [defaultColors].
 Color getColor(List<Color>? colors, int index) {
-  final palette =
-      colors != null && colors.isNotEmpty ? colors : defaultColors;
+  final palette = colors != null && colors.isNotEmpty ? colors : defaultColors;
   return palette[index % palette.length];
 }

@@ -223,6 +223,50 @@ void main() {
         expect(bounds.right, equals(10));
         expect(bounds.bottom, equals(10));
       });
+
+      test('implicit lineTo after moveTo', () {
+        // After M0 0, the bare coordinates 10 10 should be treated as L10 10.
+        final path = parseSvgPath('M0 0 10 10 Z');
+
+        final bounds = path.getBounds();
+        expect(bounds.left, equals(0));
+        expect(bounds.top, equals(0));
+        expect(bounds.right, equals(10));
+        expect(bounds.bottom, equals(10));
+      });
+
+      test('unknown tokens are skipped gracefully', () {
+        // Q is not a handled command, so it should be skipped without
+        // throwing. The remaining coordinates become implicit arguments.
+        final path = parseSvgPath('M0 0 Q 10 10 Z');
+
+        expect(path, isA<Path>());
+        // Should not throw and should still produce a valid path.
+        final bounds = path.getBounds();
+        expect(bounds.width, greaterThanOrEqualTo(0));
+        expect(bounds.height, greaterThanOrEqualTo(0));
+      });
+
+      test('implicit command with single coordinate (no y pair)', () {
+        // After M5 5, the bare "10" has no second coordinate before Z,
+        // exercising the return i + 1 branch in _handleImplicitCommand.
+        final path = parseSvgPath('M5 5 10 Z');
+
+        expect(path, isA<Path>());
+        final bounds = path.getBounds();
+        expect(bounds.width, greaterThanOrEqualTo(0));
+      });
+
+      test('tokenizer flushes final buffer without trailing Z', () {
+        // The path ends with a number so the final buffer flush fires.
+        final path = parseSvgPath('M0 0 L10 10');
+
+        final bounds = path.getBounds();
+        expect(bounds.left, equals(0));
+        expect(bounds.top, equals(0));
+        expect(bounds.right, equals(10));
+        expect(bounds.bottom, equals(10));
+      });
     });
   });
 }

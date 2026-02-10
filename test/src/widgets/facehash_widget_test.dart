@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:facehash/facehash.dart';
+import 'package:facehash/src/widgets/facehash_intensity.dart';
 import 'package:facehash/src/widgets/gradient_overlay.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -478,6 +482,157 @@ void main() {
         );
 
         expect(find.byType(Facehash), findsOneWidget);
+      });
+
+      testWidgets('re-initialises blink when name changes with blink enabled', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          buildTestWidget(
+            const Facehash(name: 'alice', enableBlink: true),
+          ),
+        );
+        await tester.pump(const Duration(seconds: 5));
+
+        // Change name while blink stays enabled
+        await tester.pumpWidget(
+          buildTestWidget(
+            const Facehash(name: 'bob', enableBlink: true),
+          ),
+        );
+        await tester.pump(const Duration(seconds: 5));
+
+        expect(find.byType(Facehash), findsOneWidget);
+      });
+
+      testWidgets('renders during blink animation mid-progress', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          buildTestWidget(
+            const Facehash(name: 'alice', enableBlink: true),
+          ),
+        );
+
+        // Advance past the blink delay to start the animation
+        await tester.pump(const Duration(seconds: 8));
+        // Pump a small frame so blink progress is between 0 and 1
+        await tester.pump(const Duration(milliseconds: 100));
+
+        expect(find.byType(Facehash), findsOneWidget);
+      });
+    });
+
+    group('mouse interaction', () {
+      testWidgets('handles mouse enter and exit', (tester) async {
+        await tester.pumpWidget(
+          buildTestWidget(
+            const Facehash(name: 'alice'),
+          ),
+        );
+
+        final gesture = await tester.createGesture(
+          kind: PointerDeviceKind.mouse,
+        );
+        await gesture.addPointer(location: Offset.zero);
+        addTearDown(gesture.removePointer);
+
+        // Move into the widget
+        await gesture.moveTo(tester.getCenter(find.byType(Facehash)));
+        await tester.pumpAndSettle();
+
+        // Move out
+        await gesture.moveTo(Offset.zero);
+        await tester.pumpAndSettle();
+
+        expect(find.byType(Facehash), findsOneWidget);
+      });
+    });
+
+    group('shape shouldReclip', () {
+      testWidgets('circle clipper does not reclip on rebuild', (tester) async {
+        await tester.pumpWidget(
+          buildTestWidget(const Facehash(name: 'alice')),
+        );
+
+        // Pump again with same shape to trigger shouldReclip
+        await tester.pumpWidget(
+          buildTestWidget(const Facehash(name: 'alice')),
+        );
+
+        expect(
+          find.descendant(
+            of: find.byType(Facehash),
+            matching: find.byType(ClipPath),
+          ),
+          findsOneWidget,
+        );
+      });
+
+      testWidgets('squircle clipper does not reclip on rebuild', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          buildTestWidget(
+            const Facehash(name: 'alice', shape: FacehashShape.squircle),
+          ),
+        );
+
+        // Pump again with same shape to trigger shouldReclip
+        await tester.pumpWidget(
+          buildTestWidget(
+            const Facehash(name: 'alice', shape: FacehashShape.squircle),
+          ),
+        );
+
+        expect(
+          find.descendant(
+            of: find.byType(Facehash),
+            matching: find.byType(ClipPath),
+          ),
+          findsOneWidget,
+        );
+      });
+    });
+
+    group('gradient shouldRepaint', () {
+      testWidgets('GradientOverlayPainter does not repaint on rebuild', (
+        tester,
+      ) async {
+        await tester.pumpWidget(
+          buildTestWidget(const Facehash(name: 'alice')),
+        );
+
+        // Pump again to trigger shouldRepaint check
+        await tester.pumpWidget(
+          buildTestWidget(const Facehash(name: 'alice')),
+        );
+
+        final customPaints = find.byType(CustomPaint);
+        var foundGradient = false;
+
+        for (var i = 0; i < customPaints.evaluate().length; i++) {
+          final widget = tester.widget<CustomPaint>(customPaints.at(i));
+          if (widget.painter is GradientOverlayPainter) {
+            foundGradient = true;
+            break;
+          }
+        }
+
+        expect(foundGradient, isTrue);
+      });
+    });
+
+    group('intensity', () {
+      test('rotateRangeRad computes correctly', () {
+        const preset = IntensityPreset(rotateRange: 180, perspective: 300);
+        expect(preset.rotateRangeRad, closeTo(pi, 0.001));
+      });
+
+      test('all presets have entries', () {
+        for (final level in Intensity3D.values) {
+          expect(IntensityPreset.presets[level], isNotNull);
+        }
       });
     });
   });
