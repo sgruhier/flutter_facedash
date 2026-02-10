@@ -8,6 +8,9 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -27,3 +30,37 @@ jobs:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
       flutter_version: "3.38.x"
+      min_coverage: 95
+
+  coverage:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests with coverage
+        run: flutter test --coverage
+
+      - name: Generate coverage badge
+        run: |
+          HIT=$(awk -F: '/^LH:/{s+=$2} END{print s+0}' coverage/lcov.info)
+          TOTAL=$(awk -F: '/^LF:/{s+=$2} END{print s+0}' coverage/lcov.info)
+          PCT=$((TOTAL > 0 ? HIT * 100 / TOTAL : 0))
+          if [ "$PCT" -ge 90 ]; then COLOR="brightgreen"; elif [ "$PCT" -ge 75 ]; then COLOR="green"; elif [ "$PCT" -ge 60 ]; then COLOR="yellowgreen"; elif [ "$PCT" -ge 40 ]; then COLOR="yellow"; else COLOR="red"; fi
+          curl -s "https://img.shields.io/badge/coverage-${PCT}%25-${COLOR}" -o coverage_badge.svg
+
+      - name: Commit coverage badge
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add coverage_badge.svg
+          git diff --staged --quiet || (git commit -m "ci: update coverage badge" && git push)
