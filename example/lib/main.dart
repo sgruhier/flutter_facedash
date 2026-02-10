@@ -71,10 +71,7 @@ class _FacehashDemoState extends State<FacehashDemo> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Colors.grey.shade500,
-                width: 1.5,
-              ),
+              borderSide: BorderSide(color: Colors.grey.shade500, width: 1.5),
             ),
           ),
         ),
@@ -222,13 +219,7 @@ class _FacehashDemoState extends State<FacehashDemo> {
         const SizedBox(height: 8),
         Row(
           children: [
-            for (final name in [
-              'terra',
-              'moss',
-              'clay',
-              'sage',
-              'bark',
-            ]) ...[
+            for (final name in ['terra', 'moss', 'clay', 'sage', 'bark']) ...[
               if (name != 'terra') const SizedBox(width: 12),
               Facehash(
                 name: name,
@@ -278,10 +269,7 @@ class _FacehashDemoState extends State<FacehashDemo> {
           children: [
             _LabeledFace(
               label: 'gradient',
-              child: Facehash(
-                name: 'variant',
-                size: 56,
-              ),
+              child: Facehash(name: 'variant', size: 56),
             ),
             SizedBox(width: 16),
             _LabeledFace(
@@ -303,19 +291,12 @@ class _FacehashDemoState extends State<FacehashDemo> {
           children: [
             _LabeledFace(
               label: 'true',
-              child: Facehash(
-                name: 'initial',
-                size: 56,
-              ),
+              child: Facehash(name: 'initial', size: 56),
             ),
             SizedBox(width: 16),
             _LabeledFace(
               label: 'false',
-              child: Facehash(
-                name: 'initial',
-                size: 56,
-                showInitial: false,
-              ),
+              child: Facehash(name: 'initial', size: 56, showInitial: false),
             ),
           ],
         ),
@@ -330,11 +311,7 @@ class _FacehashDemoState extends State<FacehashDemo> {
               if (name != 'blinky') const SizedBox(width: 16),
               _LabeledFace(
                 label: name,
-                child: Facehash(
-                  name: name,
-                  size: 56,
-                  enableBlink: true,
-                ),
+                child: Facehash(name: name, size: 56, enableBlink: true),
               ),
             ],
           ],
@@ -404,10 +381,7 @@ class _FacehashDemoState extends State<FacehashDemo> {
             padding: const EdgeInsets.only(bottom: 12),
             child: Row(
               children: [
-                Facehash(
-                  name: msg.$1,
-                  size: 36,
-                ),
+                Facehash(name: msg.$1, size: 36),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -452,9 +426,7 @@ class _FacehashDemoState extends State<FacehashDemo> {
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.white, width: 2.5),
                     ),
-                    child: Facehash(
-                      name: _stackNames[i],
-                    ),
+                    child: Facehash(name: _stackNames[i]),
                   ),
                 ),
             ],
@@ -498,10 +470,7 @@ class _FacehashDemoState extends State<FacehashDemo> {
               const SizedBox(height: 4),
               Text(
                 'deterministic avatar faces from any string',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey.shade500,
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
               ),
               const SizedBox(height: 40),
 
@@ -614,10 +583,7 @@ class _LabeledFace extends StatelessWidget {
         const SizedBox(height: 6),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 11,
-            color: Colors.grey.shade500,
-          ),
+          style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
         ),
       ],
     );
@@ -666,10 +632,7 @@ class _SadMouth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomPaint(
-      size: Size(16, 10),
-      painter: _SadMouthPainter(),
-    );
+    return const CustomPaint(size: Size(16, 10), painter: _SadMouthPainter());
   }
 }
 
