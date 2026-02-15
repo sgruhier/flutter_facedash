@@ -4,8 +4,8 @@ description: >-
   the same unique face. Zero additional dependencies.
 version: 0.1.0
 homepage: https://facehash.dev
-repository: https://github.com/cossistantcom/cossistant/tree/main/packages/facehash/facehash
-issue_tracker: https://github.com/cossistantcom/cossistant/issues
+repository: https://github.com/sgruhier/flutter_facedash
+issue_tracker: https://github.com/sgruhier/flutter_facedash/issues
 topics:
   - avatar
   - identicon
