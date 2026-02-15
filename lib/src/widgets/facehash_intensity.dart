@@ -34,13 +34,9 @@ class IntensityPreset {
 
   /// Lookup table for all intensity levels.
   static const Map<Intensity3D, IntensityPreset> presets = {
-    Intensity3D.none:
-        IntensityPreset(rotateRange: 0, offsetFraction: 0),
-    Intensity3D.subtle:
-        IntensityPreset(rotateRange: 3, offsetFraction: 0.03),
-    Intensity3D.medium:
-        IntensityPreset(rotateRange: 5, offsetFraction: 0.05),
-    Intensity3D.dramatic:
-        IntensityPreset(rotateRange: 8, offsetFraction: 0.08),
+    Intensity3D.none: IntensityPreset(rotateRange: 0, offsetFraction: 0),
+    Intensity3D.subtle: IntensityPreset(rotateRange: 3, offsetFraction: 0.03),
+    Intensity3D.medium: IntensityPreset(rotateRange: 5, offsetFraction: 0.05),
+    Intensity3D.dramatic: IntensityPreset(rotateRange: 8, offsetFraction: 0.08),
   };
 }

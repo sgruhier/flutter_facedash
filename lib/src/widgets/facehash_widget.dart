@@ -315,10 +315,16 @@ class _FacehashState extends State<Facehash> with TickerProviderStateMixin {
     final preset = IntensityPreset.presets[widget.intensity3d]!;
     if (preset.rotateRange == 0) return Matrix4.identity();
 
-    final rotateXDeg =
-        lerpDouble(_data.rotation.dx * preset.rotateRange, 0, animationValue)!;
-    final rotateYDeg =
-        lerpDouble(_data.rotation.dy * preset.rotateRange, 0, animationValue)!;
+    final rotateXDeg = lerpDouble(
+      _data.rotation.dx * preset.rotateRange,
+      0,
+      animationValue,
+    )!;
+    final rotateYDeg = lerpDouble(
+      _data.rotation.dy * preset.rotateRange,
+      0,
+      animationValue,
+    )!;
 
     return Matrix4.identity()
       ..setEntry(3, 2, 0.001)
