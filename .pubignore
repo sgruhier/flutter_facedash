@@ -1,0 +1,16 @@
+.dart_tool/
+build/
+screenshot.png
+coverage_badge.svg
+.github/
+example/android/
+example/ios/
+example/linux/
+example/macos/
+example/windows/
+example/web/icons/
+example/build/
+example/.dart_tool/
+example/.flutter-plugins
+example/.flutter-plugins-dependencies
+example/*.iml
