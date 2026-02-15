@@ -7,6 +7,8 @@
 
 Deterministic avatar faces from any string. Same input always produces the same unique face.
 
+[**Live Demo**](https://sgruhier.github.io/flutter_facedash/)
+
 Zero additional dependencies. Works everywhere Flutter runs.
 
 ## Installation
