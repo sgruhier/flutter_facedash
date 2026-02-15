@@ -625,7 +625,10 @@ void main() {
 
     group('intensity', () {
       test('rotateRangeRad computes correctly', () {
-        const preset = IntensityPreset(rotateRange: 180, perspective: 300);
+        const preset = IntensityPreset(
+          rotateRange: 180,
+          offsetFraction: 0.08,
+        );
         expect(preset.rotateRangeRad, closeTo(pi, 0.001));
       });
 

@@ -280,30 +280,50 @@ class _FacehashState extends State<Facehash> with TickerProviderStateMixin {
   ///
   /// The [animationValue] ranges from 0.0 (hash-based rotation) to
   /// 1.0 (flat / no rotation), controlled by the interaction animation.
+  /// Computes the face feature offset for the 3D tilt effect.
+  ///
+  /// Instead of relying on Matrix4 3D perspective (which renders
+  /// differently on Flutter web vs CSS), we compute the visual offset
+  /// that CSS perspective produces and apply it as a 2D translation
+  /// combined with a subtle rotation.
+  ///
+  /// The [animationValue] ranges from 0.0 (hash-based tilt) to
+  /// 1.0 (flat / centered), controlled by the interaction animation.
+  Offset _computeOffset(double animationValue) {
+    final preset = IntensityPreset.presets[widget.intensity3d]!;
+    if (preset.rotateRange == 0) return Offset.zero;
+
+    // Offset matches CSS perspective projection direction:
+    // rotateY maps to horizontal shift, rotateX to vertical shift.
+    final maxOffset = widget.size * preset.offsetFraction;
+    final dx = lerpDouble(
+      _data.rotation.dy * maxOffset,
+      0,
+      animationValue,
+    )!;
+    final dy = lerpDouble(
+      -_data.rotation.dx * maxOffset,
+      0,
+      animationValue,
+    )!;
+
+    return Offset(dx, dy);
+  }
+
+  /// Builds a subtle rotation matrix for the 3D tilt effect.
   Matrix4 _buildTransform(double animationValue) {
     final preset = IntensityPreset.presets[widget.intensity3d]!;
+    if (preset.rotateRange == 0) return Matrix4.identity();
 
-    // When the interaction animation is at 1.0 the face is flat (0 rotation).
-    // When at 0.0 it shows the hash-based rotation.
-    final hashRotateX = _data.rotation.dx * preset.rotateRange;
-    final hashRotateY = _data.rotation.dy * preset.rotateRange;
+    final rotateXDeg =
+        lerpDouble(_data.rotation.dx * preset.rotateRange, 0, animationValue)!;
+    final rotateYDeg =
+        lerpDouble(_data.rotation.dy * preset.rotateRange, 0, animationValue)!;
 
-    final rotateXDeg = lerpDouble(hashRotateX, 0, animationValue)!;
-    final rotateYDeg = lerpDouble(hashRotateY, 0, animationValue)!;
-
-    final angleX = rotateXDeg * pi / 180;
-    final angleY = rotateYDeg * pi / 180;
-
-    final matrix = Matrix4.identity();
-
-    // Only apply perspective when there is a non-zero distance.
-    if (preset.perspective > 0) {
-      matrix.setEntry(3, 2, 1.0 / preset.perspective);
-    }
-
-    return matrix
-      ..rotateX(angleX)
-      ..rotateY(angleY);
+    return Matrix4.identity()
+      ..setEntry(3, 2, 0.001)
+      ..rotateX(rotateXDeg * pi / 180)
+      ..rotateY(rotateYDeg * pi / 180);
   }
 
   // ---------------------------------------------------------------------------
@@ -313,7 +333,7 @@ class _FacehashState extends State<Facehash> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final backgroundColor = getColor(_effectiveColors, _data.colorIndex);
-    final resolvedEyeColor = widget.eyeColor ?? const Color(0xFFFFFFFF);
+    final resolvedEyeColor = widget.eyeColor ?? const Color(0xFF000000);
 
     // Face paint dimensions. Width is 60 % of the avatar; height preserves
     // the SVG viewBox aspect ratio.
@@ -388,8 +408,8 @@ class _FacehashState extends State<Facehash> with TickerProviderStateMixin {
               ),
             ),
 
-          // Face with 3D transform.
-          Center(
+          // Face with 3D transform (full-size like React's inset:0 div).
+          Positioned.fill(
             child: _buildAnimatedFace(
               resolvedEyeColor: resolvedEyeColor,
               faceWidth: faceWidth,
@@ -416,35 +436,54 @@ class _FacehashState extends State<Facehash> with TickerProviderStateMixin {
         ?_blinkController,
       ]),
       builder: (context, child) {
-        final matrix = _buildTransform(_interactionCurve.value);
+        final animValue = _interactionCurve.value;
+        final offset = _computeOffset(animValue);
+        final matrix = _buildTransform(animValue);
         final blinkProgress = _blinkAnimation?.value ?? 1.0;
 
         return Transform(
           alignment: Alignment.center,
-          transform: matrix,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Eyes.
-              CustomPaint(
-                size: Size(faceWidth, faceHeight),
-                painter: FacePainter(
-                  faceType: _data.faceType,
-                  eyeColor: resolvedEyeColor,
-                  blinkProgress: blinkProgress,
-                ),
-              ),
-
-              // Mouth area: custom builder takes priority over initial letter.
-              if (widget.mouthBuilder != null)
-                widget.mouthBuilder!(_data)
-              else if (widget.showInitial)
-                _buildInitial(resolvedEyeColor),
-            ],
+          transform: Matrix4.translationValues(offset.dx, offset.dy, 0)
+            ..multiply(matrix),
+          child: Center(
+            child: _buildFaceColumn(
+              resolvedEyeColor: resolvedEyeColor,
+              faceWidth: faceWidth,
+              faceHeight: faceHeight,
+              blinkProgress: blinkProgress,
+            ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildFaceColumn({
+    required Color resolvedEyeColor,
+    required double faceWidth,
+    required double faceHeight,
+    required double blinkProgress,
+  }) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Eyes.
+        CustomPaint(
+          size: Size(faceWidth, faceHeight),
+          painter: FacePainter(
+            faceType: _data.faceType,
+            eyeColor: resolvedEyeColor,
+            blinkProgress: blinkProgress,
+          ),
+        ),
+
+        // Mouth area: custom builder takes priority over initial letter.
+        if (widget.mouthBuilder != null)
+          widget.mouthBuilder!(_data)
+        else if (widget.showInitial)
+          _buildInitial(resolvedEyeColor),
+      ],
     );
   }
 

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.3
+
+- Fix 3D tilt effect to match React implementation (visible offset + rotation on hover)
+- Change default eye/initial color to black (matches React's `currentColor`)
+
+## 0.1.2
+
+- Add credit to Anthony Riera and Cossistant project
+
 ## 0.1.1
 
 - Fix broken screenshot and coverage badge on pub.dev

@@ -252,7 +252,7 @@ class _FacehashDemoState extends State<FacehashDemo> {
               _LabeledFace(
                 label: entry.key,
                 child: Facehash(
-                  name: 'intensity',
+                  name: 'Intensity',
                   size: 56,
                   intensity3d: entry.value,
                 ),

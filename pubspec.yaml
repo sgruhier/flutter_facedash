@@ -2,7 +2,7 @@ name: facehash
 description: >-
   Deterministic avatar faces from any string. Same input always produces
   the same unique face. Zero additional dependencies.
-version: 0.1.1
+version: 0.1.3
 homepage: https://facehash.dev
 repository: https://github.com/sgruhier/flutter_facedash
 issue_tracker: https://github.com/sgruhier/flutter_facedash/issues
@@ -14,7 +14,7 @@ topics:
 
 environment:
   sdk: ^3.10.0
-  flutter: ">=3.38.1"
+  flutter: '>=3.38.1'
 
 dependencies:
   flutter:
