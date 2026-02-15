@@ -108,7 +108,7 @@ print(data.initial);     // 'A'
 
 FaceHash produces identical faces on all platforms. The same string generates the same face in both the Flutter package and the [React/npm package](https://www.npmjs.com/package/facehash).
 
-This is a Flutter port of [facehash.dev](https://www.facehash.dev/). Built with [Claude Code](https://claude.ai/code).
+This is a Flutter port of [facehash.dev](https://www.facehash.dev/), originally created by [Anthony Riera](https://github.com/Rieranthony) as part of the [Cossistant](https://github.com/cossistantcom/cossistant) project. Built with [Claude Code](https://claude.ai/code).
 
 ## License
 
