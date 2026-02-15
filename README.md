@@ -9,6 +9,10 @@ Deterministic avatar faces from any string. Same input always produces the same 
 
 [**Live Demo**](https://sgruhier.github.io/flutter_facedash/)
 
+<p align="center">
+  <img src="screenshot.png" alt="FaceHash screenshot" width="300" />
+</p>
+
 Zero additional dependencies. Works everywhere Flutter runs.
 
 ## Installation
