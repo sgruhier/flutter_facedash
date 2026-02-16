@@ -27,7 +27,7 @@ jobs:
           channel: stable
       - run: flutter build web --base-href "/${{ github.event.repository.name }}/"
         working-directory: example
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: example/build/web
       - id: deployment
